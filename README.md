@@ -11,6 +11,5 @@ estimate_motion_EssentialMat is used for this task. This task is achieved by Ess
 found using "cv2.findEssentialMat()"; this function takes matched keypoints in subsequent pair of images and camera matrix as arguments.
 4. Estimate trajectory using rotation and translation matrices obtained from previous steps. For calculating trajectory, tranlation matrix  must be converted to a coordinate system whose origin is at the initial position of the camera. To do this, at each step, inverse transormation matrix shall be constructed from rotation and translation matrix and shall be left multiplied by the matrix obtained in previous step.
 
-Transformation Matrix at step k: ![Translation Matrix](https://www.codecogs.com/latex/eqneditor.php)
-
+Transformation Matrix at step k: ![nhk] (https://www.codecogs.com/latex/eqneditor.php)
 
