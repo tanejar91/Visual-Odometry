@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from helper import *
 
-# path to data
-root_dir_path = os.getcwd()
+
+root_dir_path = os.getcwd() # path to data
 rgb_path = os.path.join(root_dir_path, 'data/rgb')
 num_images = 52         #total number of images 
 rgb_images = []
@@ -18,7 +18,6 @@ class VisualOdometrey:
     def __init__(self):
         pass
 
-    ########## Keypoints and descriptors generation ##########
     def generate_features(self,img):
         '''
         Generate keypoints and features for an image
@@ -48,7 +47,7 @@ class VisualOdometrey:
 
         return kp,des
 
-    ########## keypoints and descriptors generation for whole data set ##########
+
     def generate_features_dataset(self,images):
         '''
         Generate keypoints and features for all the images in the dataset
@@ -72,7 +71,6 @@ class VisualOdometrey:
         return kp_list,des_list
 
 
-    ########## match features and filter them using Lowe's ratio test ##########
     def match_features(self,des1,des2,dist_threshold=0.9,num_des=500):
 
         '''
@@ -109,7 +107,7 @@ class VisualOdometrey:
 
         return filtered_match[:num_des]
 
-    ########## Visualize matches between a pair of subsequent images ##########
+
     def visualize_mathes(self,i, n,save = True):
 
         '''
@@ -137,7 +135,7 @@ class VisualOdometrey:
         plt.imshow(image_matches)
         plt.show()
 
-    ########## Camera movement between a pair of subsequent images ##########
+
     def visualize_camera_movement(self,i,kp_data,pts_show = 100,save = True):
 
         '''
@@ -177,7 +175,6 @@ class VisualOdometrey:
         plt.show()
         
 
-    ###### Trajectory Estimation ########
     def estimate_motion_EssentialMat(self, match, kp1, kp2, k):
         """
         Estimate camera motion from a pair of subsequent image frames
