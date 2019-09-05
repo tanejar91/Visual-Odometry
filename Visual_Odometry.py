@@ -188,8 +188,6 @@ class VisualOdometrey:
         kp2 -- list of the keypoints in the second image
         k -- camera calibration matrix 
         
-        Optional arguments:
-        depth1 -- a depth map of the first frame. This argument is not needed if you use Essential Matrix Decomposition
 
         Returns:
         rmat -- recovered 3x3 rotation numpy matrix
@@ -215,7 +213,7 @@ class VisualOdometrey:
     #     E, mask = cv2.findEssentialMat(image1_points,image2_points, focal=1.0, pp=(0., 0.), method=cv2.RANSAC, prob=0.999, threshold=3.0)
         points, rmat, tvec, mask = cv2.recoverPose(E, image1_points,image2_points,k)
         
-        return rmat, tvec, image1_points.tolist(), image2_points.tolist()
+        return rmat, tvec
 
 
     def estimate_trajectory(self, estimate_motion_EssentialMat, matches, kp_list, k):
@@ -254,7 +252,7 @@ class VisualOdometrey:
             match = matches[i]
             kp1,kp2 = kp_list[i], kp_list[i+1]
             
-            r,t,im1_pts,im2_pts = estimate_motion_EssentialMat(match,kp1,kp2,k)
+            r,t = estimate_motion_EssentialMat(match,kp1,kp2,k)
             T = np.concatenate((r,t),axis=1)        
             T = np.concatenate((T,lrow),axis=0)
             C = np.matmul(C,np.linalg.inv(T))
@@ -263,20 +261,22 @@ class VisualOdometrey:
         return trajectory
 
 
-odom  = VisualOdometrey()
-kp_data,des_data = odom.generate_features_dataset(rgb_images)
-
 i = 50
 n = 30 #num of matches to be displayed
 
-odom.visualize_mathes(i,n)
-# # features match for the whole dataset
-match_data = []
-for i in  range(num_images-1):
-    match = odom.match_features(des_data[i],des_data[i+1])
-    match_data.append(match)
+if __name__ == '__main__':
 
-odom.visualize_camera_movement(i,kp_data)
-trajectory = odom.estimate_trajectory(odom.estimate_motion_EssentialMat,match_data,kp_data,k)
-# print(trajectory)
-visualize_trajectory(trajectory)
+    odom  = VisualOdometrey()
+    kp_data,des_data = odom.generate_features_dataset(rgb_images)
+
+    odom.visualize_mathes(i,n)
+    # # features match for the whole dataset
+    match_data = []
+    for i in  range(num_images-1):
+        match = odom.match_features(des_data[i],des_data[i+1])
+        match_data.append(match)
+
+    odom.visualize_camera_movement(i,kp_data)
+    trajectory = odom.estimate_trajectory(odom.estimate_motion_EssentialMat,match_data,kp_data,k)
+    # print(trajectory)
+    visualize_trajectory(trajectory)
